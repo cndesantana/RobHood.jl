@@ -1,7 +1,7 @@
-using robhood 
+using RobHood 
 
 function main()
-    println("Testing robhood.jl");
+    println("Testing RobHood.jl");
 end
 
 main()
