@@ -6,8 +6,8 @@ using Quandl
 
 function testplot()
     println("Testing RobHood.jl");
-    googledat = quandl("GOOG/NASDAQ_QQQ",rows=4218,format="DataFrame");
-    amazondat = quandl("YAHOO/AMZN",rows=4218,format="DataFrame");
+    googledat = quandl("GOOG/NASDAQ_GOOG",rows=2000,format="DataFrame");
+    amazondat = quandl("YAHOO/AMZN",rows=2000,format="DataFrame");
     
     x1=collect(1:size(googledat[1,],1));
     y1=collect(googledat[5,]);
@@ -23,7 +23,7 @@ function testplot()
    
     xlab!(googleplot,title="Time")
     ylab!(googleplot,title="Closed")
-    title!(googleplot,title="Alphabet(1) and Amazon(2) (1999-2015)")
+    title!(googleplot,title="Alphabet(1) and Amazon(2) (2007-2015)")
     googleplot.background = "white"
     googleplot;
 end
