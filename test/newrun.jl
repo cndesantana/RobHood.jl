@@ -1,31 +1,31 @@
-Pkg.checkout("Vega")
-
 using RobHood 
 using Vega
 using Quandl
 
 function testplot(portfoliofile)
-    println("Testing RobHood.jl");
     portfolio = readdlm(portfoliofile,'\n');
     nstocks = length(portfolio);
-    x1 = [];
-    y1 = [];
+    x = [];
+    y = [];
     group = [];
     for(i in 1:nstocks)
-       dat = quandl(portfolio[i],rows=2000,format="DataFrame");
-       ndat = size(dat[1,])
-       x=[x;collect(1:size(dat[1,],1))];
-       y=[y;collect(dat[5,])];
-       group = [group;[[i for j in 1:dat]]];
+       dat = quandl(ASCIIString(portfolio[i]),rows=2000,format="DataFrame");
+       stockid = ASCIIString(portfolio[i]);
+       println("Stock: $stockid");
+       ndat = length(dat[1,])
+       x = [x;collect(1:ndat)];
+       y = [y;collect(dat[5,])];
+       group = [group;[stockid for j in 1:ndat]];
     end
 
     googleplot=lineplot(x = x, y = y, group = group)
    
-    xlab!(googleplot,title="Time")
+    xlab!(googleplot,title="Time (last X days)")
     ylab!(googleplot,title="Closed")
     title!(googleplot,title="Stocks")
     googleplot.background = "white"
-    googleplot;
+    googleplot
 end
 
+println("The portfolio file is: ",ARGS[1]);
 testplot(ARGS[1])
