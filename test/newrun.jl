@@ -2,9 +2,7 @@ using RobHood
 using Vega
 using Quandl
 
-function testplot(portfoliofile)
-    portfolio = readdlm(portfoliofile,'\n');
-    nstocks = length(portfolio);
+function readPortData(portfolio,nstocks)
     x = [];
     y = [];
     group = [];
@@ -17,14 +15,24 @@ function testplot(portfoliofile)
        y = [y;collect(dat[5,])];
        group = [group;[stockid for j in 1:ndat]];
     end
+    return x,y,group
+end
 
-    googleplot=lineplot(x = x, y = y, group = group)
-   
-    xlab!(googleplot,title="Time (last X days)")
-    ylab!(googleplot,title="Closed")
-    title!(googleplot,title="Stocks")
-    googleplot.background = "white"
-    googleplot
+function getPlot(x,y,group)
+    myplot=lineplot(x = x, y = y, group = group)
+    xlab!(myplot,title="Time (last X days)")
+    ylab!(myplot,title="Closed")
+    title!(myplot,title="Stocks")
+    myplot.background = "white"
+    return myplot
+end
+
+function testplot(portfoliofile)
+    portfolio = readdlm(portfoliofile,'\n');
+    nstocks = length(portfolio);
+    x,y,group = readPortData(portfolio,nstocks);
+    myplot = getPlot(x,y,group);
+    myplot
 end
 
 println("The portfolio file is: ",ARGS[1]);
