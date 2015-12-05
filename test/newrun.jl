@@ -9,8 +9,8 @@ function testplot(portfoliofile)
     y = [];
     group = [];
     for(i in 1:nstocks)
-       dat = quandl(ASCIIString(portfolio[i]),rows=2000,format="DataFrame");
-       stockid = ASCIIString(portfolio[i]);
+       stockid = ASCIIString(portfolio[i])
+       dat = quandl(stockid,rows=2000,format="DataFrame");
        println("Stock: $stockid");
        ndat = length(dat[1,])
        x = [x;collect(1:ndat)];
