@@ -5,11 +5,11 @@ module RobHood
 using Vega
 using Quandl
 
-function readPortData(portfolio,nstocks)
+function readPortData(portfolio,nS)
     x = [];
     y = [];
     group = [];
-    for(i in 1:nstocks)
+    for(i in 1:nS)
        stockid = ASCIIString(portfolio[i])
 #       stockid = portfolio[i]
 #       println("type: ",typeof(stockid));
@@ -20,10 +20,12 @@ function readPortData(portfolio,nstocks)
        y = [y;collect(dat[5,])];
        group = [group;[stockid for j in 1:ndat]];
     end
-    return x,y,group
+    nT = round(Int,length(y)/nS)
+
+    return nT,x,y,group
 end
 
-function getPlot(x,y,group)
+function getTSPlot(x,y,group)
     myplot=lineplot(x = x, y = y, group = group)
     xlab!(myplot,title="Time (last X days)")
     ylab!(myplot,title="Closed")
@@ -32,16 +34,78 @@ function getPlot(x,y,group)
     return myplot
 end
 
-function tsplot(portfoliofile)
-    portfolio = readdlm(portfoliofile,'\n');
-    nstocks = length(portfolio);
-    x,y,group = readPortData(portfolio,nstocks);
-    myplot = getPlot(x,y,group);
+function tsplot(x,y,group)
+    myplot = getTSPlot(x,y,group);
+    myplot
+end
+
+
+###### From now on, there is the implementation of the Efficient Frontier algorithm
+
+function getzbar(x,y,group,nS,nT)
+    zbar=zeros(nS);
+    for r = 1:nS
+        zbar[r] = (y[nT,r] - y[1,r])/3;
+    end
+    return zbar;
+end
+
+function vecToMat(y,nT,nS)
+    ymat = zeros(nT,nS);
+    for i = 1:nT
+        for j = 1:nS
+            ymat[i,j] = y[(j-1)*nT + i];    
+        end 
+    end
+    return ymat; 
+end
+
+function getVarCovMatrix(x,y,group,nS,nT)
+    CM=zeros(nS,nS);
+    for c = 1:(nS-1)
+       for c1 = (c+1):nS
+           CM[c,c1] = cov(y[:,c],y[:,c1]);
+       end
+    end
+    
+    for c2 =1:nS
+       CM[c2,c2] = var(y[:,c2]);
+    end
+    M = CM+CM';
+    stdevs=sqrt(diag(M));
+    return M,stdevs
+end
+
+
+function getEffFrontier(zbar,M,nS)
+    unity = ones(length(zbar));
+    A = unity' * (M^-1) * unity;
+    B = unity' * (M^-1) * zbar;
+    C = zbar' * (M^-1) * zbar;
+    D = (A .* C) - (B.^2);
+    mu = linspace(1,75,nS);
+    
+    minvar = ((A .* (mu.^2)) - ((2 .* B .* mu) .+ C)) ./ D;
+#    minstd = sqrt(minvar);
+#    return minvar,minstd
+    return mu,minvar
+end
+
+function getEffFrontPlot(stdevs,zbar,mu,minvar)
+    myplot=lineplot(x = minvar, y = mu)
+    myplot=dotplot(x = stdevs, y = zbar)
+    xlab!(myplot,title="Standard deviation (%)")
+    ylab!(myplot,title="Expected return (%)")
+    title!(myplot,title="Efficient frontier Individual securities")
+    myplot.background = "white"
+    return myplot;
+end
+
+function efffrontplot(stdevs,zbar,mu,minvar)
+    myplot = getEffFrontPlot(stdevs,zbar,mu,minvar);
     myplot
 end
 
 #Write the functions here
-
-
 
 end #module
