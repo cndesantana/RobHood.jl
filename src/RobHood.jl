@@ -79,9 +79,9 @@ end
 
 function getEffFrontier(zbar,M,nS)
     unity = ones(length(zbar));
-    A = unity' * (M^-1) * unity;
-    B = unity' * (M^-1) * zbar;
-    C = zbar' * (M^-1) * zbar;
+    A = unity' * inv(M) * unity;
+    B = unity' * inv(M) * zbar;
+    C = zbar' * inv(M) * zbar;
     D = (A .* C) - (B.^2);
     mu = linspace(1,75,nS);
     
