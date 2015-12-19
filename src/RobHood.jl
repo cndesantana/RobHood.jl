@@ -50,6 +50,7 @@ function getzbar(x,y,group,nS,nT)
     return zbar;
 end
 
+#To activate this function we need to change the runtests.jl file in order to add an "epsilon" as a parameter
 function removeLowValues!(x,y,group,epsilon)
     posLowValues = find(y.<= epsilon);
     deleteat!(y,);
