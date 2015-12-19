@@ -1,6 +1,6 @@
 using RobHood 
 
-function main(portfilename)
+function main(portfilename,epsilon)
     portfile = portfilename; 
     portfdat = readdlm(portfile,',');
     portfolio = portfdat[:,1]; 
@@ -8,7 +8,8 @@ function main(portfilename)
     
     nS = length(portfolio);
     nT,x,y,group = RobHood.readPortData(portfolio,nS);
-    ymat = RobHood.vecToMat(y,nT,nS);
+
+    nS,nT,x,y,group,ymat = RobHood.vecToMat(x,y,group,epsilon);
     zbar = RobHood.getzbar(x,ymat,group,nS,nT);
     M,stdevs = RobHood.getVarCovMatrix(x,ymat,group,nS,nT);
     mu,minvar,minstd = RobHood.getEffFrontier(zbar,M,nS);
@@ -17,4 +18,4 @@ function main(portfilename)
     RobHood.efffrontplot(stdevs,zbar,mu,minstd)
 end
 
-main(ARGS[1]);
+main(ARGS[1],2.0);

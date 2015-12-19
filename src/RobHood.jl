@@ -51,14 +51,24 @@ function getzbar(x,y,group,nS,nT)
     return zbar;
 end
 
-function vecToMat(y,nT,nS)
+function removeLowValues!(x,y,group,epsilon)
+    posLowValues = find(y.<= epsilon);
+    deleteat!(y,);
+    deleteat!(group,find(y.<= epsilon));
+    deleteat!(x,find(y.<= epsilon));
+    nS = length(unique(group)); 
+    nT = round(Int,length(y)/nS)
+end
+
+function vecToMat(x,y,group,epsilon)
+#    removeLowValues!(x,y,group,epsilon)
     ymat = zeros(nT,nS);
     for i = 1:nT
         for j = 1:nS
             ymat[i,j] = y[(j-1)*nT + i];    
         end 
     end
-    return ymat; 
+    return nS,nT,x,y,group,ymat; 
 end
 
 function getVarCovMatrix(x,y,group,nS,nT)
@@ -91,18 +101,25 @@ function getEffFrontier(zbar,M,nS)
     return mu,minvar,minstd
 end
 
-function getEffFrontPlot(stdevs,zbar,mu,minvar)
-    myplot=lineplot(x = minvar, y = mu)
-    myplot=dotplot(x = stdevs, y = zbar)
-    xlab!(myplot,title="Standard deviation (%)")
-    ylab!(myplot,title="Expected return (%)")
-    title!(myplot,title="Efficient frontier Individual securities")
-    myplot.background = "white"
-    return myplot;
+function getEffFrontPlot(stdevs,zbar,mu,minstd,group)
+    s = scatterplot(x = stdevs, y = zbar, group = unique(group));
+    eh = lineplot(x = minstd, y = mu);
+#Make names unique in ef line
+    eh.data[1].name = eh.marks[1].from.data = eh.scales[1].domain.data = eh.scales[2].domain.data = eh.scales[3].domain.data = "table2";
+#Since same axis range, just push data and line mark onto scatterplot graph
+    push!(s.data, eh.data[1]);
+    push!(s.marks, eh.marks[1]);
+
+    xlim!(s,min=0,max=maximum([stdevs minstd]));
+    xlab!(s,title="Standard deviation (%)");
+    ylab!(s,title="Expected return (%)");
+    title!(s,title="Efficient frontier Individual securities");
+    s.background = "white";
+    return s;
 end
 
-function efffrontplot(stdevs,zbar,mu,minvar)
-    myplot = getEffFrontPlot(stdevs,zbar,mu,minvar);
+function efffrontplot(stdevs,zbar,mu,minstd)
+    myplot = getEffFrontPlot(stdevs,zbar,mu,minstd);
     myplot
 end
 
