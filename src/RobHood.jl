@@ -4,6 +4,7 @@ module RobHood
 
 using Vega
 using Quandl
+using Plots
 
 function readPortData(portfolio,nS)
     x = [];
@@ -13,7 +14,7 @@ function readPortData(portfolio,nS)
        stockid = ASCIIString(portfolio[i])
 #       stockid = portfolio[i]
 #       println("type: ",typeof(stockid));
-       dat = quandl(stockid,rows=2000,format="DataFrame");
+       dat = quandl(stockid,rows=365,format="DataFrame");
        println("Stock: $stockid");
        ndat = length(dat[1,])
        x = [x;collect(1:ndat)];
