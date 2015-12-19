@@ -27,7 +27,7 @@ end
 
 function getTSPlot(x,y,group)
     myplot=lineplot(x = x, y = y, group = group)
-    xlab!(myplot,title="Time (last X days)")
+    xlab!(myplot,title="Time (days)")
     ylab!(myplot,title="Closed")
     title!(myplot,title="Stocks")
     myplot.background = "white"
