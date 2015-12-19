@@ -87,9 +87,8 @@ function getEffFrontier(zbar,M,nS)
     mu = linspace(1,75,nS);
     
     minvar = ((A .* (mu.^2)) - ((2 .* B .* mu) .+ C)) ./ D;
-#    minstd = sqrt(minvar);
-#    return minvar,minstd
-    return mu,minvar
+    minstd = sqrt(minvar);
+    return mu,minvar,minstd
 end
 
 function getEffFrontPlot(stdevs,zbar,mu,minvar)

@@ -11,10 +11,10 @@ function main(portfilename)
     ymat = RobHood.vecToMat(y,nT,nS);
     zbar = RobHood.getzbar(x,ymat,group,nS,nT);
     M,stdevs = RobHood.getVarCovMatrix(x,ymat,group,nS,nT);
-    mu,minvar = RobHood.getEffFrontier(zbar,M,nS);
+    mu,minvar,minstd = RobHood.getEffFrontier(zbar,M,nS);
     
     RobHood.tsplot(x,y,group)
-    RobHood.efffrontplot(stdevs,zbar,mu,minvar)
+    RobHood.efffrontplot(stdevs,zbar,mu,minstd)
 end
 
 main(ARGS[1]);
