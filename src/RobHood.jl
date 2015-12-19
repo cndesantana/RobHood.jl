@@ -60,7 +60,7 @@ function removeLowValues!(x,y,group,epsilon)
     nT = round(Int,length(y)/nS)
 end
 
-function vecToMat(x,y,group,epsilon)
+function vecToMat(x,y,group)
 #    removeLowValues!(x,y,group,epsilon)
     nS = length(unique(group)); 
     nT = round(Int,length(y)/nS)
