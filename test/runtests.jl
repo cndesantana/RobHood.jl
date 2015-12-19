@@ -18,4 +18,5 @@ function main(portfilename,epsilon)
     RobHood.efffrontplot(stdevs,zbar,mu,minstd)
 end
 
-main(ARGS[1],2.0);
+#main(ARGS[1],2.0);
+#main("./YahooDatabase10.csv",2.0);

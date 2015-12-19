@@ -4,7 +4,6 @@ module RobHood
 
 using Vega
 using Quandl
-using Plots
 
 function readPortData(portfolio,nS)
     x = [];
@@ -62,6 +61,8 @@ end
 
 function vecToMat(x,y,group,epsilon)
 #    removeLowValues!(x,y,group,epsilon)
+    nS = length(unique(group)); 
+    nT = round(Int,length(y)/nS)
     ymat = zeros(nT,nS);
     for i = 1:nT
         for j = 1:nS
