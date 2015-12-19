@@ -15,7 +15,8 @@ function main(portfilename,epsilon)
     mu,minvar,minstd = RobHood.getEffFrontier(zbar,M,nS);
     
     RobHood.tsplot(x,y,group)
-    RobHood.efffrontplot(stdevs,zbar,mu,minstd)
+    RobHood.efffrontplot(stdevs,zbar,mu,minstd,group)
+    RobHood.efffrontplot(stdevs,zbar,mu,minvar,group)
 end
 
 #main(ARGS[1],2.0);

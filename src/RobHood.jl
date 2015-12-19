@@ -119,8 +119,8 @@ function getEffFrontPlot(stdevs,zbar,mu,minstd,group)
     return s;
 end
 
-function efffrontplot(stdevs,zbar,mu,minstd)
-    myplot = getEffFrontPlot(stdevs,zbar,mu,minstd);
+function efffrontplot(stdevs,zbar,mu,minstd,group)
+    myplot = getEffFrontPlot(stdevs,zbar,mu,minstd,group);
     myplot
 end
 
