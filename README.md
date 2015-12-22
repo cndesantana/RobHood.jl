@@ -21,7 +21,7 @@ As one example, you can run our test script from your julia terminal:
         nS = length(portfolio);
         nT,x,y,group = RobHood.readPortData(portfolio,nS);
 
-        RobHood.tsplot(portfile)
+        RobHood.tsplot(x,y,group)
 
 "portfolio2.txt" is a ascii file stored in our test folder. It contains two codes of stocks that follow the standard of Quandl. The function tsplot will plot the time series of those stocks for the last 2000 days.
 
