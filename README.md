@@ -18,8 +18,9 @@ As one example, you can run our test script from your julia terminal:
         using RobHood
 
         portfile = "./portfolio2.txt";
-        nS = length(portfile);
-        nT,x,y,group = RobHood.readPortData(portfile,nS);
+        portfolio = portfdat[:,1];
+        nS = length(portfolio);
+        nT,x,y,group = RobHood.readPortData(portfolio,nS);
 
         RobHood.tsplot(x,y,group)
 
