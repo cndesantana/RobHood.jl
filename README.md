@@ -18,6 +18,7 @@ As one example, you can run our test script from your julia terminal:
         using RobHood
 
         portfile = "./portfolio2.txt";
+        portfdat = readdlm(portfile,',');
         portfolio = portfdat[:,1];
         nS = length(portfolio);
         nT,x,y,group = RobHood.readPortData(portfolio,nS);
