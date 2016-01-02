@@ -1,6 +1,7 @@
 using RobHood 
 
-function main(portfilename)
+#function main(portfilename)
+    portfilename="./YahooDatabase10.csv";
     portfile = portfilename; 
     portfdat = readdlm(portfile,',');
     portfolio = portfdat[:,1]; 
@@ -17,7 +18,7 @@ function main(portfilename)
     RobHood.tsplot(x,y,group)
     RobHood.efffrontplot(stdevs,zbar,mu,minstd,group)
     RobHood.efffrontplot(stdevs,zbar,mu,minvar,group)
-end
+#end
 
 #main(ARGS[1]);
 #main("./YahooDatabase10.csv");
