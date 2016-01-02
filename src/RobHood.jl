@@ -60,6 +60,15 @@ function removeLowValues!(x,y,group,epsilon)
     nT = round(Int,length(y)/nS)
 end
 
+#Function to convert a vector containing stock data into a matrix
+#Parameters: 
+#-x: vector of time steps
+#-y: vector of stock data
+#-group: vector stock id's
+#Each different time step (x) corresponds to a row in the resulting matrix
+#Each different stock id (group) corresponds to a column in the matrix
+#The values of the y-vector are disposed in the matrix according to their respective x, and group.
+#This function returns the number of stocks, the number of time steps, the vectors x, y, and group, and the resulting matrix ymat.
 function vecToMat(x,y,group)
 #    removeLowValues!(x,y,group,epsilon)
     nS = length(unique(group)); 
@@ -73,6 +82,16 @@ function vecToMat(x,y,group)
     return nS,nT,x,y,group,ymat; 
 end
 
+#Function to calculate the Covariance matrix of the time series of stock data
+#Parameters:
+#-x: matrix of time (each column is a stock, each row is a time step)
+#-y: matrix of time series of stock data (each column is a stock, each row is a time step)
+#-group: the id of the stock
+#-nS: number of stocks
+#-nT: number of time steps
+#This function returns:
+#-M: covariance matrix 
+#-stdevs: standard deviation
 function getVarCovMatrix(x,y,group,nS,nT)
     CM=zeros(nS,nS);
     for c = 1:(nS-1)
@@ -89,7 +108,15 @@ function getVarCovMatrix(x,y,group,nS,nT)
     return M,stdevs
 end
 
-
+#Function to calculate the Efficient Frontier
+#Parameters:
+#-zbar: 
+#-M: 
+#-ns: Number of stocks  
+#This function returns:
+#-mu: expected return
+#-minvar: variance
+#-minstd: standard deviation
 function getEffFrontier(zbar,M,nS)
     unity = ones(length(zbar));
     A = unity' * inv(M) * unity;
@@ -103,6 +130,13 @@ function getEffFrontier(zbar,M,nS)
     return mu,minvar,minstd
 end
 
+#Function to build the plotting object for the Efficient Frontier.
+#Parameters:
+#-stdevs: standard deviation
+#-zbar: expected return 
+#-minstd: standard deviation 
+#-mu: expected return 
+#This function returns a plotting object
 function getEffFrontPlot(stdevs,zbar,mu,minstd,group)
     s = scatterplot(x = stdevs, y = zbar, group = unique(group));
     eh = lineplot(x = minstd, y = mu);
@@ -120,6 +154,13 @@ function getEffFrontPlot(stdevs,zbar,mu,minstd,group)
     return s;
 end
 
+#Function to build the plotting object for the Efficient Frontier.
+#Parameters:
+#-stdevs: standard deviation
+#-zbar: expected return 
+#-minstd: standard deviation 
+#-mu: expected return 
+#This function will call getEffFrontPlot in order to build the plotting object
 function efffrontplot(stdevs,zbar,mu,minstd,group)
     myplot = getEffFrontPlot(stdevs,zbar,mu,minstd,group);
     myplot
