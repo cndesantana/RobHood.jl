@@ -5,6 +5,13 @@ module RobHood
 using Vega
 using Quandl
 
+#Need to download only the new data.
+#To do this, we need to store the current stock time series in *.jld files
+#Then, for each new download of data of stock named ID, we should:
+#-first: load any possible local file named ID.jld
+#-then: to compare the time series (x) in the ID.jld file with the one we want to download (we need to calculate the time series before downloading it). 
+#-So we will only download the data we still don't have locally stored. 
+
 function readPortData(portfolio,nS)
     x = [];
     y = [];
@@ -176,21 +183,16 @@ end
 ---  
    This function returns a Vega.jl plotting object
 """
-function getEffFrontPlot(stdevs,zbar,mu,minstd,group)
-    s = scatterplot(x = stdevs, y = zbar, group = unique(group));
-    eh = lineplot(x = minstd, y = mu);
+function getEffFrontPlot(stdevs,zbar,mu,minstd,group,xlab_,ylab_)
+    eff = layer(scatterplot(x = stdevs, y = zbar, group = unique(group)), lineplot(x = minstd, y = mu) );
 #Make names unique in ef line
-    eh.data[1].name = eh.marks[1].from.data = eh.scales[1].domain.data = eh.scales[2].domain.data = eh.scales[3].domain.data = "table2";
-#Since same axis range, just push data and line mark onto scatterplot graph
-    push!(s.data, eh.data[1]);
-    push!(s.marks, eh.marks[1]);
 
-    xlim!(s,min=0,max=maximum([stdevs minstd]));
-    xlab!(s,title="Standard deviation (%)");
-    ylab!(s,title="Expected return (%)");
-    title!(s,title="Efficient frontier Individual securities");
-    s.background = "white";
-    return s;
+    xlim!(eff,min=0,max=maximum([stdevs minstd]));
+    xlab!(eff,title=xlab_);
+    ylab!(eff,title=ylab_);
+    title!(eff,title="Efficient frontier Individual securities");
+    eff.background = "white";
+    return eff;
 end
 
 """
@@ -209,8 +211,8 @@ end
 ---
    This function will call getEffFrontPlot in order to build the plotting object
 """
-function efffrontplot(stdevs,zbar,mu,minstd,group)
-    myplot = getEffFrontPlot(stdevs,zbar,mu,minstd,group);
+function efffrontplot(stdevs,zbar,mu,minstd,group,xlab_,ylab_)
+    myplot = getEffFrontPlot(stdevs,zbar,mu,minstd,group,xlab_,ylab_);
     myplot
 end
 

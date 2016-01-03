@@ -16,8 +16,8 @@ using RobHood
     mu,minvar,minstd = RobHood.getEffFrontier(zbar,M,nS);
     
     RobHood.tsplot(x,y,group)
-    RobHood.efffrontplot(stdevs,zbar,mu,minstd,group)
-    RobHood.efffrontplot(stdevs,zbar,mu,minvar,group)
+    RobHood.efffrontplot(stdevs,zbar,mu,minstd,group,"Standard deviation","Expected return (%)")
+    RobHood.efffrontplot(stdevs,zbar,mu,minvar,group,"Variance","Expected return (%)")
 #end
 
 #main(ARGS[1]);
